@@ -130,7 +130,7 @@ Il nous suffit donc de creer une DLL, qui une fois injectee dans csgo.exe va res
 A chaque iteration, nous pourrons setter le boolean spotted a TRUE qui se trouve a joueur+0x980.
 
 
-## Creation de la DLL
+## 2ème étape - Creation de la DLL
 
 Creer un nouveau projet DLL en C++:
 
