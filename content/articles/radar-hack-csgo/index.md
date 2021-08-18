@@ -24,14 +24,12 @@ ShowPostNavLinks: true
 
 ## Qu'est-ce qu'un RadarHack dans CSGO ?
 
-Lorsqu'une cible est visible sur l'écran d'un joueur dans CSGO, le radar affiche ce joueur à l'aide d'un point rouge. Le client du jeu passe un attribut de type boolean à TRUE que l'on appelera "spotted" dans cet article.
+Le radar affiche les cibles visibles à l'aide de points rouges. Techniquement, le client du jeu passe un attribut de type boolean à TRUE que l'on appelera "spotted" dans cet article.
 ![](2021-08-15-13-15-03.png#center)
 
-Le but est donc de forcer ce mécanisme de manière artificielle afin de gagner un avantage sur les autres joueurs. Nous allons avoir besoin de trouver la structure en mémoire qui corresponds aux joueurs et forcer le passage de ce boolean à TRUE en écrivant directement dans la mémoire du client.
+Le but est de forcer ce mécanisme afin de gagner un avantage sur les autres joueurs. En trouvant la structure en mémoire qui corresponds aux joueurs, nous pourrons changer la valeur de ce boolean à TRUE en écrivant dans la mémoire du client.
 
 ![](2021-08-15-13-23-19.png#center)
-
-Ce radarhack sera de type "internal", cela consiste à injecter un DLL dans le client du jeu pour que notre code ait un accès direct à la mémoire de celui ci. Il nous suffit donc de trouver la bonne adresse mémoire et de passer la variable à TRUE.
 
 ## Pré-requis
 
@@ -45,99 +43,94 @@ Les outils utilisés dans cet article sont :
 
 ### Trouver en mémoire le boolean "spotted"
 
-Lancer CSGO avec le paramètre `--insecure` et demarrer une partie local avec des bots. Pour simplifier le process, activez la console dans les options du jeu et executer cette commande une fois en jeu: 
+Lancer CSGO avec le paramètre `--insecure` et demarrer une partie local avec des bots. Pour simplifier le process, activez la console dans les options du jeu et éxécuter cette commande une fois en jeu: 
 ```
 mp_roundtime 9999;mp_startmoney 16000;mp_roundtime_defuse 600000;sv_cheats 1;bot_stop 1;mp_restartgame 1;mp_limitteams 30;mp_autoteambalance 0;mp_buytime 99999
 ```
 
-Une fois la partie demarree, lancez Cheat Engine et attacher l'outil a csgo.exe :
+Une fois la partie démarrée, lancez Cheat Engine et attacher l'outil à csgo.exe :
 
 ![](2021-08-15-16-36-47.png#center)
 
-Positionnez vous maintenant dans le jeu de maniere a pouvoir faire apparaitre et disparaitre le point rouge du radar facilement puis trouver les adresses grace a CE de la même manière que dans cette video :
+Positionnez vous dans le jeu de manière à pouvoir faire varier la valeur "spotted" facilement puis identifier leurs adresses mémoires avec CE :
 
 {{< vimeo id="587580154" >}}
 
-Dans mon cas, j'ai pu identifier 2 adresses mémoires qui correspondent à la valeur "spotted" de 2 joueurs différents:
+Dans mon cas, j'ai pu identifier deux adresses mémoires qui correspondent aux valeurs "spotted" de 2 joueurs différents:
 
 ![](2021-08-15-17-56-20.png#center)
 
-Nous pouvons vérifier que ce sont les bonnes adresses en changeant leurs valeurs à 1, les points rouges doivent s'afficher sur le radar. Ces adresses sont dynamiques. Elles seront différentes à chaque lancement du jeu. 
+En changeant leurs valeurs à 1, les points rouges doivent s'afficher sur le radar. Ces adresses étant dynamiques, elles seront différentes à chaque lancement du jeu. 
 
 
 ### Analyse de la structure du joueur en mémoire
 
-Afin que notre hack fonctionne après chaque redémarrage du jeu, nous devons trouver le pointeur static qui pointe vers la structure du joueur.
+Afin que notre hack fonctionne après chaque redémarrage du jeu, nous devons trouver un pointeur static qui pointe vers la structure du joueur.
 
-Pour cela, faire un clique droit sur l'une des deux adresses mémoires et cliquer sur "Find out what accesses this address" :
+Pour cela, faites un clique droit sur l'une des deux adresses mémoires et cliquer sur "Find out what accesses this address" :
 
 ![](2021-08-15-17-58-53.png#center)
 
 ![](2021-08-15-17-59-40.png#center)
 
-Voici la ligne exacte qui accede a notre variable :
+Voici la ligne éxacte qui accède à notre variable :
 
 ```asm
 test [esi+edx*4+0x980], eax
 ```
 
-Ici EDX=0, donc on peut simplifier l'instruction a esi+0x980, ce qui veut dire que esi contient l'adresse vers la structure du joueur et 0x980 est l'offset du boolean "spotted".
+Ici EDX=0, on peut simplifier l'instruction à ESI+0x980, ESI contient l'adresse vers la structure du joueur et 0x980 est l'offset du boolean "spotted".
 
-On a donc donc: 
+On à donc : 
 
 ```
-Adresse dynamique de la structure du joueur: 68917730
+Adresse dynamique de la structure du joueur: 0x68917730
 Offset de spotted: 0x980
-Adresse dynamique de spotted = 68917730+0x980=689180B0
+Adresse dynamique de spotted = 0x68917730+0x980=0x689180B0
 ```
 
 Pour trouver son pointeur static, nous pouvons chercher avec CE quelle adresse mémoire pointe vers l'adresse dynamique de la structure (68917730) :
 
 ![](2021-08-15-18-06-51.png#center)
 
-L'adresse en verte est notre pointeur static, ici : `<client.dll>+4DA31EC` ce qui se traduit par adresse du module client.dll + 4DA31EC.
+Cheat Engine représente les pointeurs statics en vert, ici : `<client.dll>+4DA31EC`, `0x4DA31EC` est l'offset d'un joueur.
 
-A l'aide de l'outil Reclass.net, nous allons verifier si cette adresse correspond bien a un joueur et si nous sommes bien a l'interieur d'une liste.
+Avec l'outil Reclass.net, nous allons vérifier si cette adresse correspond bien à la liste des joueurs et si l'offset que nous avons trouvé corresponds au 1er joueur de cette liste.
 
-Fermer CE (ou dettacher le debugger CE en re-attachant CE a csgo.exe), puis ouvrir Reclass et attacher son debugger a csgo.exe. 
+Fermer Cheat Engine, puis ouvrir Reclass et attacher son debugger à csgo.exe. 
 
-Une fois fait, double cliquer sur l'adresse initiale a la premiere ligne et ecrire le module puis l'offset de la structure du joueur, dans notre cas `<client.dll>+4DA31EC` (ne pas oublier les `<>` autours du module) :
+Une fois fait, double cliquer sur l'adresse initiale à la première ligne et écrire le module puis l'offset du joueur, dans notre cas `<client.dll>+4DA31EC` :
 
 ![](2021-08-15-18-17-39.png#center)
 
-La premiere ligne corresponds a un pointeur vers la HEAP (le joueur sur lequel nous avons fait le test avec CE), puis d'autre pointeur vers la HEAP qui correspondent a d'autre joueurs. Nous sommes bien dans une liste de joueur.
+Nous sommes bien dans une liste de joueur. La première ligne corresponds a un pointeur vers la HEAP (la structure d'un joueur), puis d'autre pointeur vers la HEAP qui correspondent aux autres joueurs.
 
-L'ecart en mémoire entre chaqu'un de ces pointeurs est de `0x10`, information qui nous servira a iterer sur chaque joueur plus tard.
+L'écart en mémoire entre chaqu'un de ces pointeurs est de `0x10`, cette information nous servira à itérer sur les joueurs.
 
-Pour trouver le debut de cette liste, nous pouvons changer l'adresse de depart dans Reclass a `<client.dll>+4DA3100` puis faire clique droit sur la premiere ligne et `Add 2048 Bytes` :
+Pour trouver le début de cette liste, nous pouvons changer l'adresse de départ dans Reclass à `<client.dll>+4DA3100` puis faire clique droit sur la première ligne et `Add 2048 Bytes` :
 
 ![](2021-08-15-18-23-06.png#center)
 
-En scrollant vers le bas, on retombe sur la liste de joueur, ce qui nous permet de recuperer l'offset exacte du joueur 1 :
+En scrollant vers le bas, on retombe sur la liste de joueur, ce qui nous permet de récupérer l'offset du premier joueur de la liste :
 
 ![](2021-08-15-18-27-08.png#center)
 
-L'adresse du 1er joueur de la liste est donc `<client.dll>+4DA31BC` (0x00BC : premiere colonne de la ligne du pointeur du joueur 1), pour resumer, nous avons pu recuperer ces informations :
+L'offset est `<client.dll>+4DA31BC`, pour résumer, nous avons ces informations :
 
 ```
 Offset de spotted: 0x980
-Adresse static du pointeur vers le 1er joueur de la liste: <client.dll>+4DA31BC
-Offset entre chaque joueur dans la liste 0x10
+Offset du pointeur correspondant au 1er joueur de la liste: <client.dll>+4DA31BC
+Écart entre chaque joueur dans la liste 0x10
 ```
 
-Il nous suffit donc de creer une DLL, qui une fois injectee dans csgo.exe va resoudre l'adresse du module "client.dll", y ajouter l'offset 4DA31BC puis boucler sur chaque joueur en ajoutant 0x10 a cet offset. 
+## 2ème étape - Création de la DLL
 
-A chaque iteration, nous pourrons setter le boolean spotted a TRUE qui se trouve a joueur+0x980.
-
-
-## 2ème étape - Creation de la DLL
-
-Creer un nouveau projet DLL en C++:
+Créer un nouveau projet DLL en C++:
 
 ![](2021-08-15-18-40-37.png#center)
 ![](2021-08-15-18-41-13.png#center)
 
-Nous allons commencer par creer un nouveau Thread lors de l'attachement de notre DLL :
+Premièrement, on créé un nouveau Thread lors de l'injection de notre DLL :
 
 ```cpp
     case DLL_PROCESS_ATTACH: {
@@ -148,12 +141,12 @@ Nous allons commencer par creer un nouveau Thread lors de l'attachement de notre
     }
 ```
 
-Puis declarer notre Thread comme ceci:
+Puis on déclare notre Thread comme ceci:
 
 ```cpp
 DWORD WINAPI RadarHackThread(HMODULE hModule) {
     while (true) {
-        if (GetAsyncKeyState(VK_END) & 1) break;
+        if (GetAsyncKeyState(VK_END) & 1) break; // La touche END désactive le hack proprement
     }
     FreeLibraryAndExitThread(hModule, 0);
     Sleep(100);
@@ -161,9 +154,7 @@ DWORD WINAPI RadarHackThread(HMODULE hModule) {
 }
 ```
 
-Le seul include necessaire est `<Windows.h>`. Cette base de code permet de creer un Thread puis de le quitter proprement en appuyant sur la touche END du clavier.
-
-On utilise l'API Windows `GetModuleHandle()` pour recuper l'adresse du module "client.dll" puis on declare la liste de joueurs grace a l'offset precedemment trouve :
+On déclare la liste de joueurs grace à l'offset précédemment trouvé :
 
 {{< highlight cpp "linenos=table,hl_lines=2 3,linenostart=1" >}}
 DWORD WINAPI RadarHackThread(HMODULE hModule) {
@@ -179,7 +170,8 @@ DWORD WINAPI RadarHackThread(HMODULE hModule) {
 }
 {{< / highlight >}}
 
-On itere sur les joueurs en incrementant l'adresse de `0x10` puis on met spotted a TRUE :
+On itère sur les joueurs en incrémentant l'adresse de `0x10` puis on met spotted a TRUE :
+
 {{< highlight cpp "linenos=table,hl_lines=7-13,linenostart=1" >}}
 DWORD WINAPI RadarHackThread(HMODULE hModule) {
     uintptr_t client = (uintptr_t)GetModuleHandle(L"client.dll");

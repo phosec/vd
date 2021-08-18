@@ -50,8 +50,8 @@ params:
 
     label:
         text: "Violence Digital"
-        #icon: /logo.png
-        iconHeight: 35
+        icon: /logo.png
+        iconHeight: 45
 
     # profile-mode
     # profileMode:
