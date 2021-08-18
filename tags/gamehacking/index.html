@@ -9,6 +9,7 @@
 <meta name=author content="phos">
 <link rel=canonical href=https://violence.digital/tags/gamehacking/>
 <link crossorigin=anonymous href=/assets/css/stylesheet.min.565d5741ff348f45c86cd9dd9df8d391964a5b6397766431b849e75ad7a4041b.css integrity="sha256-Vl1XQf80j0XIbNndnfjTkZZKW2OXdmQxuEnnWtekBBs=" rel="preload stylesheet" as=style>
+<link rel=preload href=/logo.png as=image>
 <link rel=icon href=https://violence.digital/favicon.ico>
 <link rel=icon type=image/png sizes=16x16 href=https://violence.digital/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=https://violence.digital/favicon.ico>
@@ -33,7 +34,8 @@
 <header class=header>
 <nav class=nav>
 <div class=logo>
-<a href=https://violence.digital/ accesskey=h title="Violence Digital (Alt + H)">Violence Digital</a>
+<a href=https://violence.digital/ accesskey=h title="Violence Digital (Alt + H)">
+<img src=/logo.png alt=logo aria-label=logo height=45>Violence Digital</a>
 <span class=logo-switches>
 </span>
 </div>
@@ -55,9 +57,9 @@
 <h2>CS:GO Radar Hack en moins de 40 lignes de code</h2>
 </header>
 <section class=entry-content>
-<p>Qu’est-ce qu’un RadarHack dans CSGO ? Lorsqu’une cible est visible sur l’écran d’un joueur dans CSGO, le radar affiche ce joueur à l’aide d’un point rouge. Le client du jeu passe un attribut de type boolean à TRUE que l’on appelera “spotted” dans cet article. Le but est donc de forcer ce mécanisme de manière artificielle afin de gagner un avantage sur les autres joueurs. Nous allons avoir besoin de trouver la structure en mémoire qui corresponds aux joueurs et forcer le passage de ce boolean à TRUE en écrivant directement dans la mémoire du client....</p>
+<p>Qu’est-ce qu’un RadarHack dans CSGO ? Le radar affiche les cibles visibles à l’aide de points rouges. Techniquement, le client du jeu passe un attribut de type boolean à TRUE que l’on appelera “spotted” dans cet article. Le but est de forcer ce mécanisme afin de gagner un avantage sur les autres joueurs. En trouvant la structure en mémoire qui corresponds aux joueurs, nous pourrons changer la valeur de ce boolean à TRUE en écrivant dans la mémoire du client....</p>
 </section>
-<footer class=entry-footer>August 14, 2021&nbsp;·&nbsp;6 min&nbsp;·&nbsp;phos</footer>
+<footer class=entry-footer>August 14, 2021&nbsp;·&nbsp;5 min&nbsp;·&nbsp;phos</footer>
 <a class=entry-link aria-label="post link to CS:GO Radar Hack en moins de 40 lignes de code" href=https://violence.digital/articles/radar-hack-csgo/></a>
 </article>
 </main>
