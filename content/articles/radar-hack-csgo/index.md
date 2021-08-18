@@ -81,14 +81,14 @@ Voici la ligne exacte qui accede a notre variable :
 test [esi+edx*4+0x980], eax
 ```
 
-Ici EDX=0, donc on peut simplifier l'instruction a esi+0x980, ce qui veut dire que esi contient l'adresse vers la structure du joueur et 0x980 est l'offset du boolean que l'on va a present appeler "spotted".
+Ici EDX=0, donc on peut simplifier l'instruction a esi+0x980, ce qui veut dire que esi contient l'adresse vers la structure du joueur et 0x980 est l'offset du boolean "spotted".
 
 On a donc donc: 
 
 ```
 Adresse dynamique de la structure du joueur: 68917730
 Offset de spotted: 0x980
-Adresse dynamique de spotted = 68917730+0x180=689180B0
+Adresse dynamique de spotted = 68917730+0x980=689180B0
 ```
 
 Pour trouver son pointeur static, nous pouvons chercher avec CE quelle adresse mémoire pointe vers l'adresse dynamique de la structure (68917730) :
