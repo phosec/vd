@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>reverse on Violence Digital</title>
+    <link>https://violence.digital/tags/reverse/</link>
+    <description>Recent content in reverse on Violence Digital</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Sat, 14 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://violence.digital/tags/reverse/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>CS:GO Radar Hack en moins de 40 lignes de code</title>
+      <link>https://violence.digital/articles/radar-hack-csgo/</link>
+      <pubDate>Sat, 14 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://violence.digital/articles/radar-hack-csgo/</guid>
+      <description>Qu&amp;rsquo;est-ce qu&amp;rsquo;un RadarHack dans CSGO ? Lorsqu&amp;rsquo;une cible est visible sur l&amp;rsquo;écran d&amp;rsquo;un joueur dans CSGO, le radar affiche ce joueur à l&amp;rsquo;aide d&amp;rsquo;un point rouge. Le client du jeu passe un attribut de type boolean à TRUE que l&amp;rsquo;on appelera &amp;ldquo;spotted&amp;rdquo; dans cet article. Le but est donc de forcer ce mécanisme de manière artificielle afin de gagner un avantage sur les autres joueurs. Nous allons avoir besoin de trouver la structure en mémoire qui corresponds aux joueurs et forcer le passage de ce boolean à TRUE en écrivant directement dans la mémoire du client.</description>
+    </item>
+    
+  </channel>
+</rss>
