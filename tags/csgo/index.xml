@@ -5,7 +5,18 @@
     <link>https://violence.digital/tags/csgo/</link>
     <description>Recent content in csgo on Violence Digital</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Sat, 14 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://violence.digital/tags/csgo/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 19 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://violence.digital/tags/csgo/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Injection de DLL - LoadLibrary</title>
+      <link>https://violence.digital/articles/injection-dll-loadlibrary/</link>
+      <pubDate>Thu, 19 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://violence.digital/articles/injection-dll-loadlibrary/</guid>
+      <description>L&amp;rsquo;injection de DLL avec LoadLibrary Cette article va couvrir la téchnique la plus simple pour injecter un DLL dans un processus distant.
+Cette méthode est assez simple a exécuter, il suffit de :
+ Etape 1 - Ecrire dans le processus cible le chemin vers votre DLL Etape 2 - Exécuter LoadLibrary() dans le processus cible grace à CreateRemoteThread()  Ecrire dans le processus cible le chemin vers votre DLL Pour écrire dans un processus distant, nous avons besoin d&amp;rsquo;obtenir un HANDLE avec OpenProcess() :</description>
+    </item>
+    
     <item>
       <title>CS:GO Radar Hack en moins de 40 lignes de code</title>
       <link>https://violence.digital/articles/radar-hack-csgo/</link>
