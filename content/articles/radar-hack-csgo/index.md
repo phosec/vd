@@ -199,7 +199,4 @@ En injectant ce DLL dans csgo.exe, le RadarHack devrait etre fonctionnel :
 {{< vimeo id="587598459" >}}
 
 
-Un injecteur public puissant et gratuit : https://guidedhacking.com/resources/guided-hacking-dll-injector.4
-
-Pour aller plus loin : https://guidedhacking.com/forums/the-game-hacking-bible-learn-how-to-hack-games.469/
-
+Pour créer votre propre injecteur : [Injection de DLL - LoadLibrary]({{< ref "/articles/injection-dll-part-1/index.md" >}})
