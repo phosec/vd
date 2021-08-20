@@ -1,5 +1,5 @@
 ---
-title: "CS:GO Radar Hack en moins de 40 lignes de code"
+title: "CS:GO Radar Hack"
 date: 2021-08-14
 # weight: 1
 # aliases: ["/first"]
